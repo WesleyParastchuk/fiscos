@@ -12,6 +12,7 @@ import {
 import { useFocusEffect } from "expo-router";
 import { LinkLocalStorage } from "@/data/links/LinkLocalStorage";
 import { MaterialIcons } from "@expo/vector-icons";
+import axios from "axios";
 
 export default function HistoryScreen() {
   const [links, setLinks] = useState<string[]>([]);
@@ -33,39 +34,57 @@ export default function HistoryScreen() {
   };
 
   const handleDeleteItem = (linkToRemove: string) => {
-    Alert.alert(
-      "Excluir Link",
-      "Tem certeza que deseja excluir este link?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Excluir",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await LinkLocalStorage.getInstance().removeLink(linkToRemove);
-              setLinks((prevLinks) =>
-                prevLinks.filter((link) => link !== linkToRemove)
-              );
-            } catch (e) {
-              console.error("Erro ao excluir link:", e);
-              Alert.alert("Erro", "Não foi possível excluir o link.");
-            }
-          },
+    Alert.alert("Excluir Link", "Tem certeza que deseja excluir este link?", [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Excluir",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await LinkLocalStorage.getInstance().removeLink(linkToRemove);
+            setLinks((prevLinks) =>
+              prevLinks.filter((link) => link !== linkToRemove)
+            );
+          } catch (e) {
+            console.error("Erro ao excluir link:", e);
+            Alert.alert("Erro", "Não foi possível excluir o link.");
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
-  const handleSendToBackend = () => {
+  const handleSendToBackend = async () => {
     if (links.length === 0) {
       Alert.alert("Aviso", "Não há links para enviar.");
       return;
     }
-    Alert.alert(
-      "Simulação de Envio",
-      `${links.length} link(s) foram exibidos no console.`
-    );
+
+    await axios
+      .post("https://joey-composed-early.ngrok-free.app/links", {
+        links: links,
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          Alert.alert("Sucesso", "Links enviados com sucesso!", [
+            {
+              text: "OK",
+              onPress: () => {
+                setLinks([]);
+                LinkLocalStorage.getInstance().clearLinks();
+              },
+            },
+          ]);
+        } else {
+          Alert.alert("Erro", "Servidor indisponível ou erro ao enviar links.");
+        }
+        return response.data;
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar dados:", error);
+        Alert.alert("Erro", "Não foi possível buscar os dados do backend.");
+        return [];
+      });
   };
 
   return (
@@ -102,9 +121,17 @@ export default function HistoryScreen() {
 
       {links.length > 0 && (
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.sendButton} onPress={handleSendToBackend}>
+          <TouchableOpacity
+            style={styles.sendButton}
+            onPress={handleSendToBackend}
+          >
             <Text style={styles.sendButtonText}>Enviar Histórico</Text>
-            <MaterialIcons name="cloud-upload" size={20} color="white" style={{ marginLeft: 8 }}/>
+            <MaterialIcons
+              name="cloud-upload"
+              size={20}
+              color="white"
+              style={{ marginLeft: 8 }}
+            />
           </TouchableOpacity>
         </View>
       )}
@@ -138,9 +165,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 10,
     elevation: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   linkTouchable: {
     flex: 1,
@@ -154,29 +181,29 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   buttonContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
     paddingHorizontal: 20,
     paddingVertical: 20,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   sendButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     paddingVertical: 14,
     borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
     elevation: 3,
     shadowOpacity: 0.25,
     shadowRadius: 4,
     shadowOffset: { height: 2, width: 0 },
   },
   sendButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
