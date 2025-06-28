@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.fiscos.config.VersionControl;
 import com.example.fiscos.dto.links.AddLinksDTO;
 import com.example.fiscos.model.Invoice;
 import com.example.fiscos.repository.InvoiceRepository;
@@ -29,6 +30,9 @@ public class InvoiceService {
     
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private VersionControl versionControl;
 
     private final Path backupDir = Paths.get("backups");
 
