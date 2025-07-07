@@ -10,22 +10,22 @@ import org.springframework.stereotype.Service;
 
 import com.example.fiscos.backupGenerator.repository.BackupRepository;
 import com.example.fiscos.dto.links.AddLinksDTO;
-import com.example.fiscos.model.Invoice;
-import com.example.fiscos.repository.InvoiceRepository;
+import com.example.fiscos.model.Links;
+import com.example.fiscos.repository.LinkRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class InvoiceService {
+public class LinkService {
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private LinkRepository invoiceRepository;
 
     @Autowired
     private BackupRepository backupRepository;
-    
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -34,25 +34,25 @@ public class InvoiceService {
             List<String> linkList = links.getLinks();
 
             for (String link : linkList) {
-                Invoice invoice = new Invoice();
+                Links invoice = new Links();
                 invoice.setLink(link);
                 invoiceRepository.save(invoice);
             }
             return true;
         } catch (Exception e) {
-            Logger.getLogger(InvoiceService.class.getName()).log(Level.SEVERE, "Error saving links", e);
+            Logger.getLogger(LinkService.class.getName()).log(Level.SEVERE, "Error saving links", e);
             return false;
         }
 
     }
 
-    public List<Invoice> getAllInvoices() {
+    public List<Links> getAllLinks() {
         return invoiceRepository.findAll();
     }
-    
+
     @Transactional
-    public void deleteAllInvoices() {
-        List<Invoice> allInvoices = invoiceRepository.findAll();
+    public void deleteAlllinks() {
+        List<Links> allInvoices = invoiceRepository.findAll();
 
         if (allInvoices.isEmpty()) {
             return;
@@ -61,7 +61,7 @@ public class InvoiceService {
         try {
             JsonNode jsonNode = objectMapper.valueToTree(allInvoices);
 
-            backupRepository.saveBackup("invoices", jsonNode);
+            backupRepository.saveBackup("links", jsonNode);
 
             invoiceRepository.deleteAll();
 

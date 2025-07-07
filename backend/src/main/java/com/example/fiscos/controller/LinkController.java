@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.fiscos.dto.links.AddLinksDTO;
-import com.example.fiscos.service.InvoiceService;
+import com.example.fiscos.service.LinkService;
 
 import jakarta.validation.Valid;
 
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class LinkController {
 
     @Autowired
-    private InvoiceService invoiceService;
+    private LinkService invoiceService;
 
     @PostMapping
     public ResponseEntity<Boolean> addLinks(@RequestBody @Valid AddLinksDTO dto) {
@@ -29,13 +29,13 @@ public class LinkController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getMethodName() {
-        return ResponseEntity.ok(invoiceService.getAllInvoices());
+    public ResponseEntity<?> getAllLinks() {
+        return ResponseEntity.ok(invoiceService.getAllLinks());
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllInvoices() {
-        invoiceService.deleteAllInvoices();
+    public ResponseEntity<Void> deleteAllLinks() {
+        invoiceService.deleteAlllinks();
         return ResponseEntity.noContent().build();
     }
     
