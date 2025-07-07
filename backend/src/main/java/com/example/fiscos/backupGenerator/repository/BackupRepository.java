@@ -30,7 +30,7 @@ public class BackupRepository {
 
         String timestamp = DateTimeFormatter
             .ofPattern("yyyy-MM-dd'T'HH-mm-ss'Z'")
-            .withZone(Instant.now().atZone(DateTimeFormatter.ISO_INSTANT.getZone()).getZone())
+            .withZone(java.time.ZoneId.systemDefault())
             .format(Instant.now());
 
         Path targetFile = BACKUP_ROOT

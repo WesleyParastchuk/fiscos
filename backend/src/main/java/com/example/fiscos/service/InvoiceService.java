@@ -1,12 +1,6 @@
 package com.example.fiscos.service;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,10 +8,11 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.fiscos.config.VersionControl;
+import com.example.fiscos.backupGenerator.repository.BackupRepository;
 import com.example.fiscos.dto.links.AddLinksDTO;
 import com.example.fiscos.model.Invoice;
 import com.example.fiscos.repository.InvoiceRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.transaction.Transactional;
@@ -27,14 +22,12 @@ public class InvoiceService {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    private BackupRepository backupRepository;
     
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private VersionControl versionControl;
-
-    private final Path backupDir = Paths.get("backups");
 
     public Boolean addLinks(AddLinksDTO links) {
         try {
@@ -66,14 +59,9 @@ public class InvoiceService {
         }
 
         try {
-            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
-            String filename = String.format("invoices-backup-%s.json", timestamp);
-            Path backupFilePath = backupDir.resolve(filename);
+            JsonNode jsonNode = objectMapper.valueToTree(allInvoices);
 
-            String jsonContent = objectMapper.writeValueAsString(allInvoices);
-
-            Files.createDirectories(backupDir);
-            Files.write(backupFilePath, jsonContent.getBytes(StandardCharsets.UTF_8));
+            backupRepository.saveBackup("invoices", jsonNode);
 
             invoiceRepository.deleteAll();
 
