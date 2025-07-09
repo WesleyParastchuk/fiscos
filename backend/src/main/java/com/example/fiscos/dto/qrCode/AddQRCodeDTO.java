@@ -1,4 +1,4 @@
-package com.example.fiscos.dto.links;
+package com.example.fiscos.dto.qrCode;
 
 import java.util.List;
 

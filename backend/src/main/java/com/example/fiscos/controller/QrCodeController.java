@@ -3,7 +3,7 @@ package com.example.fiscos.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.fiscos.dto.links.AddQRCodeDTO;
+import com.example.fiscos.dto.qrCode.AddQRCodeDTO;
 import com.example.fiscos.service.QrCodeService;
 
 import jakarta.validation.Valid;

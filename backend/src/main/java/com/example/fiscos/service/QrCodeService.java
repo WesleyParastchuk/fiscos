@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.fiscos.backupGenerator.repository.BackupRepository;
-import com.example.fiscos.dto.links.AddQRCodeDTO;
+import com.example.fiscos.dto.qrCode.AddQRCodeDTO;
 import com.example.fiscos.model.QRCode;
 import com.example.fiscos.repository.QrCodeRepository;
 import com.fasterxml.jackson.databind.JsonNode;
