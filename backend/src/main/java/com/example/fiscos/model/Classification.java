@@ -16,7 +16,7 @@ import jakarta.persistence.GenerationType;
 
 @Entity
 @Data
-@Table(name = "produtos")
+@Table(name = "classificacao")
 public class Classification {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

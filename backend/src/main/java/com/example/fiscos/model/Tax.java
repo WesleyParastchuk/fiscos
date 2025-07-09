@@ -14,7 +14,7 @@ import jakarta.persistence.GenerationType;
 
 @Entity
 @Data
-@Table(name = "tributo")
+@Table(name = "tributos")
 public class Tax {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
