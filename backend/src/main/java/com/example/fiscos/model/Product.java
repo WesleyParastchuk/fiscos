@@ -39,5 +39,7 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<UserProductClassification> userClassifications;
 
-}
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductTagUser> productTagAssociations;
 
+}

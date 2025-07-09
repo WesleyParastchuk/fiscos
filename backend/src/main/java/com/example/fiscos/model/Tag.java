@@ -7,6 +7,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -14,8 +16,8 @@ import jakarta.persistence.GenerationType;
 
 @Entity
 @Data
-@Table(name = "usuarios")
-public class User {
+@Table(name = "etiqueta")
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -23,19 +25,14 @@ public class User {
     @Column(name = "nome", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Invoice> invoices;
+    @Column(name = "descricao", nullable = false)
+    private String description;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Classification> customClassifications;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserProductClassification> productClassifications;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
     private List<ProductTagUser> productTagAssociations;
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
-    private List<Tag> createdTags;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "id_usuario", nullable = true)
+    private User createdBy;
 
 }
