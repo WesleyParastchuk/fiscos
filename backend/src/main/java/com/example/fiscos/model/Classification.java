@@ -18,6 +18,7 @@ import jakarta.persistence.GenerationType;
 @Data
 @Table(name = "classificacao")
 public class Classification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -31,6 +32,13 @@ public class Classification {
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = true)
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "id_pai", nullable = true)
+    private Classification parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Classification> children;
 
     @OneToMany(mappedBy = "classification", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductClassification> productClassifications;
