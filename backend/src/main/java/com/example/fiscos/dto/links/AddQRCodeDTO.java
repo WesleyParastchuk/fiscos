@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class AddLinksDTO {
+public class AddQRCodeDTO {
 
     @NotEmpty(message = "A lista de links não pode estar vazia.")
     @JsonProperty("links")

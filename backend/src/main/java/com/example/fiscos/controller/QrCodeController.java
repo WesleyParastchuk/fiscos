@@ -3,8 +3,8 @@ package com.example.fiscos.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.fiscos.dto.links.AddLinksDTO;
-import com.example.fiscos.service.LinkService;
+import com.example.fiscos.dto.links.AddQRCodeDTO;
+import com.example.fiscos.service.QrCodeService;
 
 import jakarta.validation.Valid;
 
@@ -15,29 +15,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 @RestController
-@RequestMapping("/links")
-public class LinkController {
+@RequestMapping("/qrcode")
+public class QrCodeController {
 
     @Autowired
-    private LinkService invoiceService;
+    private QrCodeService qrCodeService;
 
     @PostMapping
-    public ResponseEntity<Boolean> addLinks(@RequestBody @Valid AddLinksDTO dto) {
-        return ResponseEntity.status(201).body(invoiceService.addLinks(dto));
+    public ResponseEntity<Boolean> addLinks(@RequestBody @Valid AddQRCodeDTO dto) {
+        return ResponseEntity.status(201).body(qrCodeService.addQRCode(dto));
     }
 
     @GetMapping
     public ResponseEntity<?> getAllLinks() {
-        return ResponseEntity.ok(invoiceService.getAllLinks());
+        return ResponseEntity.ok(qrCodeService.listQRCodes());
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteAllLinks() {
-        invoiceService.deleteAlllinks();
+        qrCodeService.deleteQrCodes();
         return ResponseEntity.noContent().build();
     }
-    
 
 }

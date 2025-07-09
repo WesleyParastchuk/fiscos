@@ -9,19 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.fiscos.backupGenerator.repository.BackupRepository;
-import com.example.fiscos.dto.links.AddLinksDTO;
-import com.example.fiscos.model.Links;
-import com.example.fiscos.repository.LinkRepository;
+import com.example.fiscos.dto.links.AddQRCodeDTO;
+import com.example.fiscos.model.QRCode;
+import com.example.fiscos.repository.QrCodeRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class LinkService {
+public class QrCodeService {
 
     @Autowired
-    private LinkRepository invoiceRepository;
+    private QrCodeRepository qrCodeRepository;
 
     @Autowired
     private BackupRepository backupRepository;
@@ -29,41 +29,41 @@ public class LinkService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public Boolean addLinks(AddLinksDTO links) {
+    public Boolean addQRCode(AddQRCodeDTO links) {
         try {
             List<String> linkList = links.getLinks();
 
             for (String link : linkList) {
-                Links invoice = new Links();
+                QRCode invoice = new QRCode();
                 invoice.setLink(link);
-                invoiceRepository.save(invoice);
+                qrCodeRepository.save(invoice);
             }
             return true;
         } catch (Exception e) {
-            Logger.getLogger(LinkService.class.getName()).log(Level.SEVERE, "Error saving links", e);
+            Logger.getLogger(QrCodeService.class.getName()).log(Level.SEVERE, "Error saving links", e);
             return false;
         }
 
     }
 
-    public List<Links> getAllLinks() {
-        return invoiceRepository.findAll();
+    public List<QRCode> listQRCodes() {
+        return qrCodeRepository.findAll();
     }
 
     @Transactional
-    public void deleteAlllinks() {
-        List<Links> allInvoices = invoiceRepository.findAll();
+    public void deleteQrCodes() {
+        List<QRCode> allQrCodes = qrCodeRepository.findAll();
 
-        if (allInvoices.isEmpty()) {
+        if (allQrCodes.isEmpty()) {
             return;
         }
 
         try {
-            JsonNode jsonNode = objectMapper.valueToTree(allInvoices);
+            JsonNode jsonNode = objectMapper.valueToTree(allQrCodes);
 
-            backupRepository.saveBackup("links", jsonNode);
+            backupRepository.saveBackup("qrCodes", jsonNode);
 
-            invoiceRepository.deleteAll();
+            qrCodeRepository.deleteAll();
 
         } catch (IOException e) {
             throw new RuntimeException("Falha ao criar backup, exclusão abortada.", e);

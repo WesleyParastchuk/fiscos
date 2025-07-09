@@ -9,9 +9,9 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "links_old")
+@Table(name = "qr_codes")
 @Data
-public class Links {
+public class QRCode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
