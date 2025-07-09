@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import jakarta.persistence.GenerationType;
@@ -19,6 +20,7 @@ import jakarta.persistence.GenerationType;
 @Data
 @Table(name = "notas_fiscais")
 public class Invoice {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -43,4 +45,7 @@ public class Invoice {
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
     private List<ProductInvoice> productInvoices;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "qr_code_id", referencedColumnName = "id")
+    private QRCode qrCode;
 }
