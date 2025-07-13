@@ -23,7 +23,7 @@ public class QrCodeController {
     private QrCodeService qrCodeService;
 
     @PostMapping
-    public ResponseEntity<Boolean> addLinks(@RequestBody @Valid AddQRCodeDTO dto) {
+    public ResponseEntity<?> addLinks(@RequestBody @Valid AddQRCodeDTO dto) {
         return ResponseEntity.status(201).body(qrCodeService.addQRCode(dto));
     }
 
