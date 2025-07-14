@@ -27,7 +27,7 @@ public class GrossProduct {
     @Column(name = "codigo", nullable = true)
     private String code;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "grossProduct", cascade = CascadeType.ALL)
     private List<ProductInvoice> productInvoices;
 
 }

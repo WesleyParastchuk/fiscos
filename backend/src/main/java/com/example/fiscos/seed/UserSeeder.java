@@ -11,7 +11,7 @@ import com.example.fiscos.repository.UserRepository;
 public class UserSeeder {
    
     @Bean
-    CommandLineRunner initDatabase(UserRepository repo) {
+    CommandLineRunner initUsers(UserRepository repo) {
         return args -> {
             if (repo.count() == 0) {
                 repo.save(new User("Wesley Parastchuk"));

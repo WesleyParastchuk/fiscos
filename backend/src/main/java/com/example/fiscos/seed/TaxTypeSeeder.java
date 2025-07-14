@@ -10,7 +10,7 @@ import com.example.fiscos.repository.TaxTypeRepository;
 @Configuration
 public class TaxTypeSeeder {
     @Bean
-    CommandLineRunner initDatabase(TaxTypeRepository repo) {
+    CommandLineRunner initTaxSeeders(TaxTypeRepository repo) {
         return args -> {
             if (repo.count() == 0) {
                 repo.save(new TaxType("Imposto estadual", "ESTADUAL"));

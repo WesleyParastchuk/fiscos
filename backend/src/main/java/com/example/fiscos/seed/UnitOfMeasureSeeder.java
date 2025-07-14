@@ -11,7 +11,7 @@ import com.example.fiscos.repository.UnitOfMeasureRepository;
 public class UnitOfMeasureSeeder {
 
     @Bean
-    CommandLineRunner initDatabase(UnitOfMeasureRepository repo) {
+    CommandLineRunner initUnitsOfMeasure(UnitOfMeasureRepository repo) {
         return args -> {
             if (repo.count() == 0) {
                 repo.save(new UnitOfMeasure("Kilogram", "KG"));

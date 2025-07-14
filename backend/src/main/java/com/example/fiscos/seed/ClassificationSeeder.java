@@ -11,7 +11,7 @@ import com.example.fiscos.repository.ClassificationRepository;
 public class ClassificationSeeder {
     
     @Bean
-    CommandLineRunner initDatabase(ClassificationRepository repo) {
+    CommandLineRunner initClassifications(ClassificationRepository repo) {
         return args -> {
             if (repo.count() == 0) {
                 //repo.save(new Classification());

@@ -27,11 +27,10 @@ public class UnitOfMeasure {
     private String abbreviation;
 
     @OneToMany(mappedBy = "unitOfMeasure")
-    private List<Product> productsInvoices;
+    private List<ProductInvoice> productsInvoices;
 
     public UnitOfMeasure(String name, String abbreviation) {
         this.name = name;
         this.abbreviation = abbreviation;
     }
 }
-
