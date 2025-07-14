@@ -31,6 +31,14 @@ public class ProductInvoice {
     private Product product;
 
     @ManyToOne
+    @JoinColumn(name = "produto_bruto_id", nullable = false)
+    private GrossProduct grossProduct;
+
+    @ManyToOne
     @JoinColumn(name = "nota_fiscal_id", nullable = false)
     private Invoice invoice;
+
+    @ManyToOne
+    @JoinColumn(name = "unidade_medida_id", nullable = false)
+    private UnitOfMeasure unitOfMeasure;
 }

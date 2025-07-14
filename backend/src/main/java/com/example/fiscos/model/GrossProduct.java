@@ -14,8 +14,8 @@ import jakarta.persistence.GenerationType;
 
 @Entity
 @Data
-@Table(name = "produtos")
-public class Product {
+@Table(name = "produtos_brutos")
+public class GrossProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,16 +24,10 @@ public class Product {
     @Column(name = "nome", nullable = false)
     private String name;
 
+    @Column(name = "codigo", nullable = true)
+    private String code;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductInvoice> productInvoices;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductClassification> productClassifications;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<UserProductClassification> userClassifications;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductTagUser> productTagAssociations;
 
 }

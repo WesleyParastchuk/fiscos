@@ -27,6 +27,6 @@ public class UnitOfMeasure {
     private String abbreviation;
 
     @OneToMany(mappedBy = "unitOfMeasure")
-    private List<Product> products;
+    private List<Product> productsInvoices;
 }
 
