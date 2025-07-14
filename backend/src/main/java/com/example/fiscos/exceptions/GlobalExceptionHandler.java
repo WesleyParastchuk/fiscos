@@ -7,8 +7,20 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.example.fiscos.dto.error.ApiError;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ExternalApiException.class)
+    public ResponseEntity<ApiError> handleExternalApiException(ExternalApiException ex, HttpServletRequest request) {
+        ApiError apiError = new ApiError(
+                HttpStatus.BAD_GATEWAY.value(),
+                ex.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(apiError);
+    }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiError> handleRuntimeException(RuntimeException ex, WebRequest request) {
