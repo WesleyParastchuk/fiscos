@@ -2,16 +2,21 @@ package com.example.fiscos.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "qr_codes")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "qr_codes")
 public class QRCode {
 
     @Id
@@ -19,10 +24,9 @@ public class QRCode {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "link", nullable = false)
+    @Column(name = "link", nullable = false, unique = true)
     private String link;
 
-    @OneToOne(mappedBy = "qrCode")
+    @OneToOne(mappedBy = "qrCode", fetch = FetchType.LAZY)
     private Invoice invoice;
 }
-

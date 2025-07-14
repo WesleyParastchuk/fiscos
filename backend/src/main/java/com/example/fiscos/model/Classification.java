@@ -5,20 +5,23 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.GenerationType;
 
 @Entity
 @Data
-@Table(name = "classificacao")
+@AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "classificacao")
 public class Classification {
 
     @Id
@@ -31,21 +34,21 @@ public class Classification {
     @Column(name = "descricao", nullable = false)
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = true)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pai", nullable = true)
     private Classification parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Classification> children;
 
-    @OneToMany(mappedBy = "classification", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "classification", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductClassification> productClassifications;
 
-    @OneToMany(mappedBy = "classification", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "classification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserProductClassification> userClassifications;
 
     public Classification(String name, String description) {

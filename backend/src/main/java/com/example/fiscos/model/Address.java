@@ -1,16 +1,23 @@
 package com.example.fiscos.model;
 
+import com.example.fiscos.dto.nfeApi.AddressDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import jakarta.persistence.GenerationType;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "enderecos")
 public class Address {
     @Id
@@ -32,9 +39,18 @@ public class Address {
     @Column(name = "cidade", nullable = false)
     private String city;
 
-    @Column(name = "estado", nullable = false)
-    private String state;
+    @Column(name = "uf", nullable = false)
+    private String uf;
 
-    @OneToOne(mappedBy = "address")
+    @OneToOne(mappedBy = "address", fetch = FetchType.LAZY)
     private Supplier supplier;
+
+    public Address(AddressDTO addressDTO) {
+        this.street = addressDTO.getStreet();
+        this.number = addressDTO.getNumber();
+        this.complement = addressDTO.getComplement();
+        this.district = addressDTO.getDistrict();
+        this.city = addressDTO.getCity();
+        this.uf = addressDTO.getUf();
+    }
 }

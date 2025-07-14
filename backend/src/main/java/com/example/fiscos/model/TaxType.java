@@ -4,16 +4,19 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.GenerationType;
 
 @Entity
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tipo_tributos")
 public class TaxType {
@@ -27,7 +30,7 @@ public class TaxType {
     @Column(name = "abreviacao", nullable = false)
     private String abbreviation;
 
-    @OneToMany(mappedBy = "taxType")
+    @OneToMany(mappedBy = "taxType", fetch = FetchType.LAZY)
     private List<Tax> taxes;
 
     public TaxType(String name, String abbreviation) {
