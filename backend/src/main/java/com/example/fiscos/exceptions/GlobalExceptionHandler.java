@@ -12,6 +12,16 @@ import jakarta.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(DataConflictException.class)
+    public ResponseEntity<ApiError> handleDataConflictException(DataConflictException ex, HttpServletRequest request) {
+        ApiError apiError = new ApiError(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiError);
+    }
+
     @ExceptionHandler(ExternalApiException.class)
     public ResponseEntity<ApiError> handleExternalApiException(ExternalApiException ex, HttpServletRequest request) {
         ApiError apiError = new ApiError(
