@@ -1,5 +1,7 @@
 package com.example.fiscos.dto.nfeApi;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -7,29 +9,38 @@ import lombok.Data;
 public class GeneralInfoDTO {
 
     @NotBlank(message = "Tipo de emissão não pode estar vazio.")
+    @JsonProperty("emissionType")
     private String emissionType;
 
     @Positive(message = "Número da nota fiscal deve ser positivo.")
+    @JsonProperty("invoiceNumber")
     private int invoiceNumber;
 
     @Positive(message = "Série deve ser positiva.")
+    @JsonProperty("series")
     private int series;
 
     @Positive(message = "Data de emissão deve ser um timestamp válido.")
+    @JsonProperty("emissionDate")
     private long emissionDate;
 
     @NotBlank(message = "Protocolo de autorização não pode estar vazio.")
+    @JsonProperty("authorizationProtocol")
     private String authorizationProtocol;
 
     @Positive(message = "Data do protocolo deve ser um timestamp válido.")
+    @JsonProperty("protocolDate")
     private long protocolDate;
 
     @NotBlank(message = "Ambiente não pode estar vazio.")
+    @JsonProperty("environment")
     private String environment;
 
     @NotBlank(message = "Versão XML não pode estar vazia.")
+    @JsonProperty("xmlVersion")
     private String xmlVersion;
 
     @NotBlank(message = "Versão XSLT não pode estar vazia.")
+    @JsonProperty("xsltVersion")
     private String xsltVersion;
 }

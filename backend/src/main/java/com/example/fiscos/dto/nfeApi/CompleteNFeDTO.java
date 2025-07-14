@@ -10,7 +10,7 @@ import java.util.List;
 public class CompleteNFeDTO {
 
     @NotNull(message = "Emitente não pode ser nulo.")
-    private IssuerDTO issuer;
+    private SupplierDTO supplier;
 
     @NotEmpty(message = "A lista de produtos não pode estar vazia.")
     private List<@Valid ProductDTO> products;
