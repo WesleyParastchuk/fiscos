@@ -38,4 +38,7 @@ public class User {
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<Tag> createdTags;
 
+    public User(String name) {
+        this.name = name;
+    }
 }

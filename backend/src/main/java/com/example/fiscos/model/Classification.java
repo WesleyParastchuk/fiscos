@@ -12,11 +12,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import jakarta.persistence.GenerationType;
 
 @Entity
 @Data
 @Table(name = "classificacao")
+@NoArgsConstructor
 public class Classification {
 
     @Id
@@ -45,5 +47,16 @@ public class Classification {
 
     @OneToMany(mappedBy = "classification", cascade = CascadeType.ALL)
     private List<UserProductClassification> userClassifications;
+
+    public Classification(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Classification(String name, String description, Classification parent) {
+        this.name = name;
+        this.description = description;
+        this.parent = parent;
+    }
 
 }
