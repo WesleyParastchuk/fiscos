@@ -1,7 +1,5 @@
 package com.example.fiscos.model;
 
-import com.example.fiscos.dto.nfeApi.AddressDTO;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,13 +42,4 @@ public class Address {
 
     @OneToOne(mappedBy = "address", fetch = FetchType.LAZY)
     private Supplier supplier;
-
-    public Address(AddressDTO addressDTO) {
-        this.street = addressDTO.getStreet();
-        this.number = addressDTO.getNumber();
-        this.complement = addressDTO.getComplement();
-        this.district = addressDTO.getDistrict();
-        this.city = addressDTO.getCity();
-        this.uf = addressDTO.getUf();
-    }
 }

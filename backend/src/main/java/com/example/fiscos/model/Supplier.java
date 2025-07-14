@@ -2,8 +2,6 @@ package com.example.fiscos.model;
 
 import java.util.List;
 
-import com.example.fiscos.dto.nfeApi.SupplierDTO;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,10 +39,4 @@ public class Supplier {
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Invoice> invoices;
-
-    public Supplier(SupplierDTO supplierDTO) {
-        this.name = supplierDTO.getName();
-        this.cnpj = supplierDTO.getCnpj();
-        this.address = new Address(supplierDTO.getAddress());
-    }
 }
