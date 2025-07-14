@@ -1,4 +1,4 @@
-package com.example.fiscos.dto.grossProduct;
+package com.example.fiscos.dto.rawProduct;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GrossProductDTO {
-    
+public class RawProductDTO {
+
     @JsonProperty("id")
     private Long id;
 
@@ -19,5 +19,5 @@ public class GrossProductDTO {
 
     @JsonProperty("code")
     private String code;
-    
+
 }

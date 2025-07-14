@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GrossProductNFeDTO {
+public class RawProductNFeDTO {
 
     @NotBlank(message = "Nome do produto não pode estar vazio.")
     @JsonProperty("name")

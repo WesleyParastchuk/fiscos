@@ -20,7 +20,7 @@ import jakarta.persistence.GenerationType;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "produtos_brutos")
-public class GrossProduct {
+public class RawProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,7 +32,7 @@ public class GrossProduct {
     @Column(name = "codigo", nullable = true)
     private String code;
 
-    @OneToMany(mappedBy = "grossProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rawProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductInvoice> productInvoices;
 
 }

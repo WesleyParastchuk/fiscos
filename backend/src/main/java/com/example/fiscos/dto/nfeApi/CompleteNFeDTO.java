@@ -17,7 +17,7 @@ public class CompleteNFeDTO {
     private SupplierNFeDTO supplier;
 
     @NotEmpty(message = "A lista de produtos não pode estar vazia.")
-    private List<@Valid GrossProductNFeDTO> products;
+    private List<@Valid RawProductNFeDTO> products;
 
     @NotNull(message = "Resumo não pode ser nulo.")
     private SummaryNFeDTO summary;
