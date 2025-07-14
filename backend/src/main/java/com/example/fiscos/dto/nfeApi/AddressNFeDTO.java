@@ -3,10 +3,14 @@ package com.example.fiscos.dto.nfeApi;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class AddressDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class AddressNFeDTO {
 
     @NotBlank(message = "Rua não pode estar vazia.")
     @JsonProperty("street")

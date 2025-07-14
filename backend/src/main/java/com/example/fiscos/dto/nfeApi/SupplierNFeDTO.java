@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class SupplierDTO {
+@NoArgsConstructor
+public class SupplierNFeDTO {
     @NotBlank(message = "Nome do emitente não pode estar vazio.")
     @JsonProperty("name")
     private String name;
@@ -20,5 +22,5 @@ public class SupplierDTO {
 
     @NotNull(message = "Endereço do emitente não pode ser nulo.")
     @JsonProperty("address")
-    private AddressDTO address;
+    private AddressNFeDTO address;
 }

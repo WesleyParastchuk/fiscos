@@ -3,10 +3,14 @@ package com.example.fiscos.dto.nfeApi;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class TaxDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class TaxNFeDTO {
 
     @PositiveOrZero(message = "Valor total do imposto deve ser zero ou positivo.")
     @JsonProperty("totalTaxAmount")
