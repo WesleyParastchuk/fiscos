@@ -20,7 +20,7 @@ import jakarta.persistence.GenerationType;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "produtos")
-public class Product {
+public class ProcessedProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

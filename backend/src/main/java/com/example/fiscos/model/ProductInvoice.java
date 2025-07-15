@@ -33,11 +33,11 @@ public class ProductInvoice {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "produto_id", nullable = false)
-    private Product product;
+    private ProcessedProduct processedProduct;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "produto_bruto_id", nullable = false)
-    private GrossProduct grossProduct;
+    private RawProduct rawProduct;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nota_fiscal_id", nullable = false)

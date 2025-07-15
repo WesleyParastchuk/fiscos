@@ -28,7 +28,7 @@ public class UserProductClassification {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "produto_id", nullable = false)
-    private Product product;
+    private ProcessedProduct processedProduct;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "classificacao_id", nullable = false)
