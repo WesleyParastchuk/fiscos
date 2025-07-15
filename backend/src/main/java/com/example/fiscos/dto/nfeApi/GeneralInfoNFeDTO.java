@@ -18,15 +18,15 @@ public class GeneralInfoNFeDTO {
 
     @Positive(message = "Número da nota fiscal deve ser positivo.")
     @JsonProperty("invoiceNumber")
-    private int invoiceNumber;
+    private Integer invoiceNumber;
 
     @Positive(message = "Série deve ser positiva.")
     @JsonProperty("series")
-    private int series;
+    private Integer series;
 
     @Positive(message = "Data de emissão deve ser um timestamp válido.")
     @JsonProperty("emissionDate")
-    private long emissionDate;
+    private Long emissionDate;
 
     @NotBlank(message = "Protocolo de autorização não pode estar vazio.")
     @JsonProperty("authorizationProtocol")
@@ -34,7 +34,7 @@ public class GeneralInfoNFeDTO {
 
     @Positive(message = "Data do protocolo deve ser um timestamp válido.")
     @JsonProperty("protocolDate")
-    private long protocolDate;
+    private Long protocolDate;
 
     @NotBlank(message = "Ambiente não pode estar vazio.")
     @JsonProperty("environment")

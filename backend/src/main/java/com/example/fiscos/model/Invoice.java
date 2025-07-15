@@ -31,7 +31,7 @@ public class Invoice {
     private Long id;
 
     @Column(name = "data_emissao", nullable = false)
-    private String issueDate;
+    private Long issueDate;
 
     @Column(name = "valor_total", nullable = false)
     private BigDecimal totalValue;

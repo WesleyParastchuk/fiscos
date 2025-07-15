@@ -26,13 +26,16 @@ public class ProductInvoice {
     private Long id;
 
     @Column(name = "quantidade", nullable = false)
-    private Integer quantity;
+    private BigDecimal quantity;
 
-    @Column(name = "valor", nullable = false)
-    private BigDecimal value;
+    @Column(name = "preco_unitario", nullable = false)
+    private BigDecimal unitPrice;
+
+    @Column(name = "preco_total", nullable = false)
+    private BigDecimal totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "produto_id", nullable = false)
+    @JoinColumn(name = "produto_id", nullable = true)
     private ProcessedProduct processedProduct;
 
     @ManyToOne(fetch = FetchType.LAZY)

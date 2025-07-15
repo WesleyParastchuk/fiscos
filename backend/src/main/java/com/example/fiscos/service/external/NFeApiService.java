@@ -1,6 +1,9 @@
 package com.example.fiscos.service.external;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,7 @@ public class NFeApiService {
         this.webClient = webClientBuilder.baseUrl(nfeUrl).build();
     }
 
-    public CompleteNFeDTO getNFeByUrl(String nfeUrl) {
+    private CompleteNFeDTO getNFeByLink(String nfeUrl) {
         Map<String, String> requestBody = Map.of("url", nfeUrl);
 
         try {
@@ -38,5 +41,12 @@ public class NFeApiService {
         } catch (Exception ex) {
             throw new ExternalApiException("Falha ao conectar com o serviço externo de NFe.", ex);
         }
+    }
+
+    public List<CompleteNFeDTO> getNFeByLinks(List<String> links) {
+        return links.stream()
+                .map(this::getNFeByLink)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }

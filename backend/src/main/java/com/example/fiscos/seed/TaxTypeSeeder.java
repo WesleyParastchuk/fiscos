@@ -15,6 +15,7 @@ public class TaxTypeSeeder {
             if (repo.count() == 0) {
                 repo.save(new TaxType("Imposto estadual", "ESTADUAL"));
                 repo.save(new TaxType("Imposto federal", "FEDERAL"));
+                repo.save(new TaxType("Imposto total", "TOTAL"));
                 System.out.println(">>> Tipos de tributos criados com sucesso!");
             }
         };

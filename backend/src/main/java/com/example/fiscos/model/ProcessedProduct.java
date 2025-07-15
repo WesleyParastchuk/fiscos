@@ -29,16 +29,16 @@ public class ProcessedProduct {
     @Column(name = "nome", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "processedProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductInvoice> productInvoices;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "processedProduct", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductClassification> productClassifications;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "processedProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserProductClassification> userClassifications;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "processedProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductTagUser> productTagAssociations;
 
 }
