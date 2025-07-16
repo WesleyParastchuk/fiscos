@@ -8,6 +8,7 @@ import com.example.fiscos.dto.rawProduct.RawProductDTO;
 import com.example.fiscos.dto.supplier.SupplierDTO;
 import com.example.fiscos.mapper.RawProductMapper;
 import com.example.fiscos.mapper.SupplierMapper;
+import com.example.fiscos.repository.ProcessedProductRepository;
 import com.example.fiscos.repository.RawProductRepository;
 import com.example.fiscos.repository.SupplierRepository;
 import com.example.fiscos.service.NFeService;
@@ -16,11 +17,14 @@ import com.example.fiscos.service.QrCodeService;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/qrcode")
@@ -32,17 +36,19 @@ public class QrCodeController {
     private final RawProductRepository rawProductRepository;
     private final RawProductMapper rawProductMapper;
     private final NFeService nfeService;
+    private final ProcessedProductRepository processedProductRepository;
 
     QrCodeController(QrCodeService qrCodeService, SupplierRepository supplierRepository,
             SupplierMapper supplierMapper, RawProductRepository rawProductRepository,
             RawProductMapper rawProductMapper,
-            NFeService nfeService) {
+            NFeService nfeService, ProcessedProductRepository processedProductRepository) {
         this.qrCodeService = qrCodeService;
         this.supplierRepository = supplierRepository;
         this.supplierMapper = supplierMapper;
         this.rawProductRepository = rawProductRepository;
         this.rawProductMapper = rawProductMapper;
         this.nfeService = nfeService;
+        this.processedProductRepository = processedProductRepository;
     }
 
     @PostMapping
@@ -67,5 +73,13 @@ public class QrCodeController {
 
         ).toList();
     }
+
+    @GetMapping("/processedProduct")
+    public String getProcessedProduct() {
+        return processedProductRepository.findAll().stream()
+                .map(processedProduct -> processedProduct.getName())
+                .collect(Collectors.joining(", "));
+    }
+    
 
 }
