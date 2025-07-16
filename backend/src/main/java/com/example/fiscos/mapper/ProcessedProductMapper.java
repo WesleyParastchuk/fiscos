@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.fiscos.dto.processedProduct.ProcessedProductDTO;
 import com.example.fiscos.model.ProcessedProduct;
+import com.example.fiscos.model.mongo.ProcessedProductBackup;
 
 @Component
 public class ProcessedProductMapper {
@@ -24,6 +25,14 @@ public class ProcessedProductMapper {
         processedProductDTO.setName(processedProduct.getName());
 
         return processedProductDTO;
+    }
+
+    public ProcessedProductBackup toBackup(ProcessedProduct processedProduct) {
+
+        ProcessedProductBackup processedProductBackup = new ProcessedProductBackup();
+        processedProductBackup.setName(processedProduct.getName());
+
+        return processedProductBackup;
     }
 
 }

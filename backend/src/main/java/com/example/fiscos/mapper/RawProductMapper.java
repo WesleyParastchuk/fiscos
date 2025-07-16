@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.example.fiscos.dto.nfeApi.RawProductNFeDTO;
 import com.example.fiscos.dto.rawProduct.RawProductDTO;
 import com.example.fiscos.model.RawProduct;
+import com.example.fiscos.model.mongo.RawProductBackup;
 
 @Component
 public class RawProductMapper {
@@ -44,6 +45,19 @@ public class RawProductMapper {
     public List<RawProduct> toEntityListFromNFe(List<RawProductNFeDTO> rawProductNFeDTOs) {
         return rawProductNFeDTOs.stream()
                 .map(this::toEntity)
+                .collect(Collectors.toList());
+    }
+
+    public RawProductBackup toBackup(RawProduct rawProduct) {
+        RawProductBackup rawProductBackup = new RawProductBackup();
+        rawProductBackup.setName(rawProduct.getName());
+        rawProductBackup.setCode(rawProduct.getCode());
+        return rawProductBackup;
+    }
+
+    public List<RawProductBackup> toBackupList(List<RawProduct> rawProducts) {
+        return rawProducts.stream()
+                .map(this::toBackup)
                 .collect(Collectors.toList());
     }
 
