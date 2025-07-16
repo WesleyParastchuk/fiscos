@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,4 +36,14 @@ public class ProcessedProduct {
 
     @OneToMany(mappedBy = "processedProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RawProduct> rawProducts;
+
+    public ProcessedProduct(String name) {
+        this.name = name;
+        this.productInvoices = new ArrayList<>();
+        this.productClassifications = new ArrayList<>();
+        this.userClassifications = new ArrayList<>();
+        this.productTagAssociations = new ArrayList<>();
+        this.rawProducts = new ArrayList<>();
+    }
+
 }

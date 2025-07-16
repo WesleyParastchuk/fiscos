@@ -30,4 +30,9 @@ public class ProductClassification {
     @JoinColumn(name = "classificacao_id", nullable = false)
     private Classification classification;
 
+    public ProductClassification(ProcessedProduct processedProduct, Classification classification) {
+        this.processedProduct = processedProduct;
+        this.classification = classification;
+    }
+
 }

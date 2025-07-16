@@ -25,9 +25,15 @@ public class RawProduct {
     private String code;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "produto_id", nullable = false)
+    @JoinColumn(name = "produto_id", nullable = true)
     private ProcessedProduct processedProduct;
 
     @OneToMany(mappedBy = "rawProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductInvoice> productInvoices;
+
+    public RawProduct(String name, String code, ProcessedProduct processedProduct) {
+        this.name = name;
+        this.code = code;
+        this.processedProduct = processedProduct;
+    }
 }
