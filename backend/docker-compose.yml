@@ -19,6 +19,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - NFE_API_URL=${NFE_API_URL}
+      - MONGO_URI=${MONGO_URI}
     env_file:
       - .env
     depends_on:
