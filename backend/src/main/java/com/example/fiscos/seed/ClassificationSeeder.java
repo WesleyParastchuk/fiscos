@@ -14,7 +14,8 @@ public class ClassificationSeeder {
     CommandLineRunner initClassifications(ClassificationRepository repo) {
         return args -> {
             if (repo.count() == 0) {
-                //repo.save(new Classification());
+                // repo.save(new Classification("Alimentos e Bebidas", "Produtos alimentícios e bebidas"));
+                // repo.save(new Classification("Higiene e Limpeza", "Produtos de higiene pessoal e limpeza doméstica"));
                 System.out.println(">>> Classificações criados com sucesso!");
             }
         };
