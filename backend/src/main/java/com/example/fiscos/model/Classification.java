@@ -31,6 +31,9 @@ public class Classification {
     @Column(name = "nome", nullable = false)
     private String name;
 
+    @Column(name = "nome_resumido", nullable = false)
+    private String shortName;
+
     @Column(name = "descricao", nullable = false)
     private String description;
 
@@ -51,13 +54,18 @@ public class Classification {
     @OneToMany(mappedBy = "classification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserProductClassification> userClassifications;
 
-    public Classification(String name, String description) {
+    @Column(name = "ativo", nullable = false)
+    private boolean active = true;
+
+    public Classification(String name, String shortName, String description) {
         this.name = name;
+        this.shortName = shortName;
         this.description = description;
     }
 
-    public Classification(String name, String description, Classification parent) {
+    public Classification(String name, String shortName, String description, Classification parent) {
         this.name = name;
+        this.shortName = shortName;
         this.description = description;
         this.parent = parent;
     }

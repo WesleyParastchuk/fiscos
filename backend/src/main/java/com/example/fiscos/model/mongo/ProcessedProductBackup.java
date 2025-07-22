@@ -2,6 +2,7 @@ package com.example.fiscos.model.mongo;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -14,6 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Document(collection = "produtos")
 public class ProcessedProductBackup {
+
+    @Id
+    private String id;
 
     @Field("data_criacao")
     private String creationDate;

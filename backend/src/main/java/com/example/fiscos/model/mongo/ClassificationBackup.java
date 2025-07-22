@@ -16,6 +16,9 @@ public class ClassificationBackup {
     @Field("nome")
     private String name;
 
+    @Field("nome_resumido")
+    private String shortName;
+
     @Field("descricao")
     private String description;
 

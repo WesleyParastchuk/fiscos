@@ -23,8 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/qrcode")
@@ -49,6 +47,14 @@ public class QrCodeController {
         this.rawProductMapper = rawProductMapper;
         this.nfeService = nfeService;
         this.processedProductRepository = processedProductRepository;
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getQrCodes() {
+        return ResponseEntity.ok().body(
+                qrCodeService.getAllQrCodes().stream()
+                        .map(qrCode -> qrCode.getLink())
+                        .collect(Collectors.toList()));
     }
 
     @PostMapping
@@ -80,6 +86,5 @@ public class QrCodeController {
                 .map(processedProduct -> processedProduct.getName())
                 .collect(Collectors.joining(", "));
     }
-    
 
 }

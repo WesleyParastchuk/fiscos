@@ -16,6 +16,10 @@ public class QrCodeService {
         this.qrCodeRepository = qrCodeRepository;
     }
 
+    public List<QRCode> getAllQrCodes() {
+        return qrCodeRepository.findAll();
+    }
+
     public QRCode save(String link) {
         QRCode qrCode = new QRCode();
         qrCode.setLink(link);

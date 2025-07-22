@@ -61,4 +61,17 @@ public class RawProductMapper {
                 .collect(Collectors.toList());
     }
 
+    public RawProduct toEntity(RawProductBackup rawProductBackup) {
+        RawProduct rawProduct = new RawProduct();
+        rawProduct.setName(rawProductBackup.getName());
+        rawProduct.setCode(rawProductBackup.getCode());
+        return rawProduct;
+    }
+
+    public List<RawProduct> toEntityListFromBackup(List<RawProductBackup> rawProductBackups) {
+        return rawProductBackups.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
+    }
+
 }

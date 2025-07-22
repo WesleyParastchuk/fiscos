@@ -14,6 +14,7 @@ public class ClassificationMapper {
     public ClassificationBackup toBackup(Classification classification) {
         ClassificationBackup classificationBackup = new ClassificationBackup();
         classificationBackup.setName(classification.getName());
+        classificationBackup.setShortName(classification.getShortName());
         classificationBackup.setDescription(classification.getDescription());
 
         if (classification.getParent() != null) {

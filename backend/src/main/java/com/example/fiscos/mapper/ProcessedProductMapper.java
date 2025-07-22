@@ -1,5 +1,8 @@
 package com.example.fiscos.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 import com.example.fiscos.dto.processedProduct.ProcessedProductDTO;
@@ -16,6 +19,20 @@ public class ProcessedProductMapper {
         processedProduct.setName(processedProductDto.getName());
 
         return processedProduct;
+    }
+
+    public ProcessedProduct toEntity(ProcessedProductBackup processedProductBackup) {
+
+        ProcessedProduct processedProduct = new ProcessedProduct();
+        processedProduct.setName(processedProductBackup.getName());
+
+        return processedProduct;
+    }
+
+    public List<ProcessedProduct> toEntityListFromBackup(List<ProcessedProductBackup> processedProductBackups) {
+        return processedProductBackups.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 
     public ProcessedProductDTO toDTO(ProcessedProduct processedProduct) {

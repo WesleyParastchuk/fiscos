@@ -37,6 +37,20 @@ public class BackupService {
         this.classificationMapper = classificationMapper;
     }
 
+    public String getBackupInString() {
+        List<ProcessedProductBackup> backups = backupRepo.findAll();
+        return backups.stream()
+            .map(backup -> {
+                StringBuilder sb = new StringBuilder();
+                sb.append("{");                sb.append("\"creationDate\":").append("\"").append(backup.getCreationDate()).append("\"").append(",");
+                sb.append("\"rawProducts\":").append(backup.getRawProducts() != null ? backup.getRawProducts().toString() : "null").append(",");
+                sb.append("\"classifications\":").append(backup.getClassifications() != null ? backup.getClassifications().toString() : "null");
+                sb.append("}");
+                return sb.toString();
+            })
+            .collect(Collectors.joining(", ", "[", "]"));
+    }
+
     public void backupPostgresToMongo() {
         String currentDateTimestamp = String.valueOf(System.currentTimeMillis());
         List<ProcessedProduct> products = repo.findAll();

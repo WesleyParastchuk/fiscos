@@ -1,46 +1,85 @@
 package com.example.fiscos.seed;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.example.fiscos.mapper.ProcessedProductMapper;
+import com.example.fiscos.mapper.RawProductMapper;
 import com.example.fiscos.model.Classification;
 import com.example.fiscos.model.ProcessedProduct;
 import com.example.fiscos.model.ProductClassification;
 import com.example.fiscos.model.RawProduct;
+import com.example.fiscos.model.mongo.ProcessedProductBackup;
+import com.example.fiscos.model.mongo.RawProductBackup;
 import com.example.fiscos.repository.ClassificationRepository;
 import com.example.fiscos.repository.ProcessedProductRepository;
+import com.example.fiscos.repository.ProductClassificationRepository;
+import com.example.fiscos.repository.RawProductRepository;
+import com.example.fiscos.repository.mongo.ProcessedProductBackupRepository;
+import com.example.fiscos.service.ProcessedProductService;
 
 @Configuration
 public class ProcessedProductSeeder {
 
+    private final ClassificationSeeder classificationSeeder;
+    
+    private final ProcessedProductRepository processedProductRepository;
+    private final ClassificationRepository classificationRepository;
+    private final ProductClassificationRepository productClassificationRepository;
+    private final RawProductRepository rawProductRepository;
+    
+    private final ProcessedProductBackupRepository processedProductBackupRepository;
+
+    private final ProcessedProductMapper processedProductMapper;
+    private final RawProductMapper rawProductMapper;
+
+    public ProcessedProductSeeder(ProcessedProductRepository processedProductRepository,
+            ClassificationSeeder classificationSeeder, ClassificationRepository classificationRepository,
+            ProcessedProductBackupRepository processedProductBackupRepository, ProductClassificationRepository productClassificationRepository,
+            ProcessedProductMapper processedProductMapper, RawProductMapper rawProductMapper, RawProductRepository rawProductRepository) {
+        this.processedProductRepository = processedProductRepository;
+        this.classificationSeeder = classificationSeeder;
+        this.classificationRepository = classificationRepository;
+        this.productClassificationRepository = productClassificationRepository;
+        this.processedProductBackupRepository = processedProductBackupRepository;
+        this.processedProductMapper = processedProductMapper;
+        this.rawProductMapper = rawProductMapper;
+        this.rawProductRepository = rawProductRepository;
+    }
+
     @Bean
-    CommandLineRunner initProcessedProducts(ProcessedProductRepository repo, ClassificationRepository repoClassification) {
+    CommandLineRunner initProcessedProducts() {
         return args -> {
-            if (repo.count() == 0) {
-                ProcessedProduct product1 = new ProcessedProduct("Produto A");
-                ProcessedProduct product2 = new ProcessedProduct("Produto B");
+            if (processedProductRepository.count() == 0) {
+                classificationSeeder.seed(classificationRepository);
+                
+                List<ProcessedProductBackup> list = processedProductBackupRepository.findAll();
 
-                Classification classification1 = new Classification("Alimentos e Bebidas",
-                        "Produtos alimentícios e bebidas");
-                Classification classification2 = new Classification("Higiene e Limpeza",
-                        "Produtos de higiene pessoal e limpeza doméstica");
-                // Salvar primeiro as classificações
-                repoClassification.save(classification1);
-                repoClassification.save(classification2);
+                list.forEach(backup -> {
+                    ProcessedProduct processedProduct = processedProductMapper.toEntity(backup);
+                    List<RawProduct> rawProducts = rawProductMapper.toEntityListFromBackup(backup.getRawProducts());
+                    processedProduct.setRawProducts(rawProducts);
+                    
+                    List<ProductClassification> productClassifications = backup.getClassifications().stream()
+                            .map(classificationBackup -> {
+                                Classification classification = classificationRepository.findByNameAndShortNameAndDescription(
+                                        classificationBackup.getName(),
+                                        classificationBackup.getShortName(),
+                                        classificationBackup.getDescription()
+                                );
+                                return new ProductClassification(processedProduct, classification);
+                            }).collect(Collectors.toList());
+                    
+                    processedProduct.setProductClassifications(productClassifications);
+                    
+                    processedProductRepository.save(processedProduct);
+                });
 
-                // Depois criar ProductClassification com as classificações já persistidas
-                product1.getProductClassifications().add(new ProductClassification(product1, classification1));
-                product2.getProductClassifications().add(new ProductClassification(product2, classification2));
-
-                RawProduct rawProduct1 = new RawProduct("Ingrediente A", "1234", product1);
-                RawProduct rawProduct2 = new RawProduct("Ingrediente B", "5678", product2);
-                product1.getRawProducts().add(rawProduct1);
-                product2.getRawProducts().add(rawProduct2);
-                repo.save(product1);
-                repo.save(product2);
-
-                System.out.println(">>> Classificações criados com sucesso!");
+                System.out.println(">>> APOS APOS APOS criados com sucesso!");
             }
         };
     }
