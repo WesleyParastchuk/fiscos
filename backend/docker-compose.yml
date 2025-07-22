@@ -20,6 +20,9 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - NFE_API_URL=${NFE_API_URL}
       - MONGO_URI=${MONGO_URI}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL}
+      - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE}
     env_file:
       - .env
     depends_on:

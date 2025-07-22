@@ -14,13 +14,11 @@ import com.example.fiscos.model.ProcessedProduct;
 import com.example.fiscos.model.ProductClassification;
 import com.example.fiscos.model.RawProduct;
 import com.example.fiscos.model.mongo.ProcessedProductBackup;
-import com.example.fiscos.model.mongo.RawProductBackup;
 import com.example.fiscos.repository.ClassificationRepository;
 import com.example.fiscos.repository.ProcessedProductRepository;
 import com.example.fiscos.repository.ProductClassificationRepository;
 import com.example.fiscos.repository.RawProductRepository;
 import com.example.fiscos.repository.mongo.ProcessedProductBackupRepository;
-import com.example.fiscos.service.ProcessedProductService;
 
 @Configuration
 public class ProcessedProductSeeder {
@@ -29,8 +27,6 @@ public class ProcessedProductSeeder {
     
     private final ProcessedProductRepository processedProductRepository;
     private final ClassificationRepository classificationRepository;
-    private final ProductClassificationRepository productClassificationRepository;
-    private final RawProductRepository rawProductRepository;
     
     private final ProcessedProductBackupRepository processedProductBackupRepository;
 
@@ -44,11 +40,9 @@ public class ProcessedProductSeeder {
         this.processedProductRepository = processedProductRepository;
         this.classificationSeeder = classificationSeeder;
         this.classificationRepository = classificationRepository;
-        this.productClassificationRepository = productClassificationRepository;
         this.processedProductBackupRepository = processedProductBackupRepository;
         this.processedProductMapper = processedProductMapper;
         this.rawProductMapper = rawProductMapper;
-        this.rawProductRepository = rawProductRepository;
     }
 
     @Bean
