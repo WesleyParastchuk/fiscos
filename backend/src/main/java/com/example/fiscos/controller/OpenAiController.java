@@ -16,7 +16,8 @@ public class OpenAiController {
 
     @PostMapping("/prompt")
     public String prompt(@RequestBody String prompt) {
-        return openAiService.sendPrompt(prompt);
+        //return openAiService.sendPrompt(prompt);
+        return "teste";
     }
 }
 

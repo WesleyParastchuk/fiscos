@@ -1,7 +1,11 @@
 package com.example.fiscos.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
+import com.example.fiscos.dto.openAi.ProductClassifiedDTO;
 import com.example.fiscos.dto.processedProduct.ProcessedProductDTO;
 import com.example.fiscos.mapper.ProcessedProductMapper;
 import com.example.fiscos.model.ProcessedProduct;
@@ -22,6 +26,21 @@ public class ProcessedProductService {
     public ProcessedProduct save(ProcessedProductDTO processedProductDto) {
         ProcessedProduct processedProduct = processedProductMapper.toEntity(processedProductDto);
         return processedProductRepo.save(processedProduct);
+    }
+
+    public List<ProcessedProduct> saveAll(List<ProductClassifiedDTO> processedProductDtos) {
+        return processedProductDtos.stream()
+                .map(dto -> {
+                    String nameUpper = dto.getResult().toUpperCase();
+                    ProcessedProduct existing = processedProductRepo.findByNameIgnoreCase(nameUpper);
+                    if (existing == null) {
+                        ProcessedProduct newProduct = processedProductMapper.toEntity(dto);
+                        newProduct.setName(nameUpper);
+                        return processedProductRepo.save(newProduct);
+                    }
+                    return existing;
+                })
+                .collect(Collectors.toList());
     }
 
 }

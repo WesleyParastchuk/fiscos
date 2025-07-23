@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import com.example.fiscos.dto.openAi.ProductClassifiedDTO;
 import com.example.fiscos.dto.processedProduct.ProcessedProductDTO;
 import com.example.fiscos.model.ProcessedProduct;
 import com.example.fiscos.model.mongo.ProcessedProductBackup;
@@ -50,6 +51,12 @@ public class ProcessedProductMapper {
         processedProductBackup.setName(processedProduct.getName());
 
         return processedProductBackup;
+    }
+
+    public ProcessedProduct toEntity(ProductClassifiedDTO productClassifiedDTO) {
+        ProcessedProduct processedProduct = new ProcessedProduct();
+        processedProduct.setName(productClassifiedDTO.getResult());
+        return processedProduct;
     }
 
 }

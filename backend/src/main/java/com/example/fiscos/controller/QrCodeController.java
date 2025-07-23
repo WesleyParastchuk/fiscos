@@ -1,6 +1,7 @@
 package com.example.fiscos.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.fiscos.dto.qrCode.AddQRCodeDTO;
@@ -50,11 +51,11 @@ public class QrCodeController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getQrCodes() {
-        return ResponseEntity.ok().body(
-                qrCodeService.getAllQrCodes().stream()
-                        .map(qrCode -> qrCode.getLink())
-                        .collect(Collectors.toList()));
+    public ResponseEntity<?> getInvoices(@RequestParam Long userId) {
+            return ResponseEntity.ok().body(
+                    qrCodeService.getAllQrCodes().stream()
+                            .map(qrCode -> qrCode.getLink())
+                            .collect(Collectors.toList()));
     }
 
     @PostMapping

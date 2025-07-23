@@ -19,10 +19,11 @@ public class SupplierService {
     }
 
     public Supplier save(SupplierNFeDTO supplier) {
-        Supplier newSupplier = supplierMapper.toEntity(supplier);
-        if (!supplierRepository.existsByCnpj(newSupplier.getCnpj())) {
-            supplierRepository.save(newSupplier);
-        }
-        return newSupplier;
+        Supplier existingSupplier = supplierRepository.findByCnpj(supplier.getCnpj());
+        if (existingSupplier == null) {
+            Supplier newSupplier = supplierMapper.toEntity(supplier);
+            return supplierRepository.save(newSupplier);
+        } 
+        return existingSupplier;
     }
 }
