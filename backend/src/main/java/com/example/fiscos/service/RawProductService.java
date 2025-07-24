@@ -61,4 +61,15 @@ public class RawProductService {
         return newProducts;
     }
 
+    public List<RawProduct> getExistingRawProducts(List<RawProductNFeDTO> rawProductDtos) {
+        List<RawProduct> existingProducts = new ArrayList<>();
+        for (RawProductNFeDTO dto : rawProductDtos) {
+            RawProduct existing = rawProductRepository.findByNameAndCode(dto.getName(), dto.getCode());
+            if (existing != null) {
+                existingProducts.add(existing);
+            }
+        }
+        return existingProducts;
+    }
+
 }

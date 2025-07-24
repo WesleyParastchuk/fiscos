@@ -43,4 +43,20 @@ public class ProcessedProductService {
                 .collect(Collectors.toList());
     }
 
+    // retornar que não estão no banco
+    public List<ProcessedProduct> getNewProcessedProducts(List<ProductClassifiedDTO> processedProductDtos) {
+        return processedProductDtos.stream()
+                .map(dto -> {
+                    String nameUpper = dto.getResult().toUpperCase();
+                    ProcessedProduct existing = processedProductRepo.findByNameIgnoreCase(nameUpper);
+                    if (existing == null) {
+                        return processedProductMapper.toEntity(dto);
+                    }
+                    return null;
+                })
+                .filter(pp -> pp != null)
+                .collect(Collectors.toList());
+    }
+    
+
 }

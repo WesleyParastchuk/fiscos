@@ -70,4 +70,12 @@ public class Classification {
         this.parent = parent;
     }
 
+    public Classification(String name, String shortName, String description, Classification parent, boolean active) {
+        this.name = name;
+        this.shortName = shortName;
+        this.description = description;
+        this.parent = parent;
+        this.active = active;
+    }
+
 }
