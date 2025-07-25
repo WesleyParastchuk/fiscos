@@ -1,6 +1,7 @@
 package com.example.fiscos.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -26,9 +27,9 @@ public class QrCodeService {
         return qrCodeRepository.save(qrCode);
     }
 
-    public void checkDuplicateLinks(List<String> links) {
-        if (qrCodeRepository.existsByLinkIn(links)) {
-            throw new IllegalArgumentException("Alguns links já existem.");
-        }
+    public List<String> removeDuplicateLinks(List<String> links) {
+        return links.stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

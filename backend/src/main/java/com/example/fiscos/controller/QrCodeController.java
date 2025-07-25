@@ -76,6 +76,13 @@ public class QrCodeController {
         return ResponseEntity.status(201).body(dto);
     }
 
+    @PostMapping("/log")
+    public void postLog(@RequestBody @Valid AddQRCodeDTO dto) {
+
+        System.out.println("Received log entries: " + dto.getLinks().get(0));
+    }
+    
+
     @GetMapping("/supplier")
     public List<SupplierDTO> getMethodName() {
         return supplierRepository.findAll().stream()

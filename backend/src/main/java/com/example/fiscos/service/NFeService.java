@@ -67,7 +67,7 @@ public class NFeService {
     @Transactional
     public void saveAll(Long userId, List<String> links) {
         User user = userService.checkUserExists(userId);
-        qrCodeService.checkDuplicateLinks(links);
+        links = qrCodeService.removeDuplicateLinks(links);
 
         List<CompleteNFeDTO> nfeList = nfeApiService.getNFeByLinks(links);
 
