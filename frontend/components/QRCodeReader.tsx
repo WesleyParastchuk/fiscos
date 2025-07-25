@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, ActivityIndicator } from 'react-native';
-import { CameraView, Camera } from 'expo-camera';
-import { Feather } from '@expo/vector-icons';
-import { useIsFocused } from '@react-navigation/native'; 
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native";
+import { CameraView, Camera } from "expo-camera";
+import { Feather } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 
 type QRCodeReaderProps = {
   onScanSuccess: (data: string) => void;
-  onValidate: (data: string) => Promise<'success' | 'error'>;
+  onValidate: (data: string) => Promise<"success" | "error">;
   instructionText?: string;
   successLabel?: string;
   errorLabel?: string;
@@ -19,19 +25,21 @@ export default function QRCodeReader({
   instructionText = "Aponte a câmera para o QR Code",
   successLabel = "Sucesso!",
   errorLabel = "Inválido",
-  errorDescription = "Este QR Code não é válido."
+  errorDescription = "Este QR Code não é válido.",
 }: QRCodeReaderProps) {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
   const [qrData, setQrData] = useState<string | null>(null);
-  const [validationResult, setValidationResult] = useState<'success' | 'error' | null>(null);
+  const [validationResult, setValidationResult] = useState<
+    "success" | "error" | null
+  >(null);
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
     const getCameraPermissions = async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setHasPermission(status === "granted");
     };
 
     getCameraPermissions();
@@ -58,7 +66,7 @@ export default function QRCodeReader({
     const result = await onValidate(data);
     setValidationResult(result);
 
-    if (result === 'success') {
+    if (result === "success") {
       onScanSuccess(data);
     }
   };
@@ -67,7 +75,9 @@ export default function QRCodeReader({
     return (
       <View style={styles.permissionContainer}>
         <ActivityIndicator size="large" color="#ffffff" />
-        <Text style={styles.permissionText}>Solicitando permissão da câmera...</Text>
+        <Text style={styles.permissionText}>
+          Solicitando permissão da câmera...
+        </Text>
       </View>
     );
   }
@@ -82,13 +92,13 @@ export default function QRCodeReader({
   return (
     <View style={styles.container}>
       {isFocused && hasPermission && (
-          <CameraView
-            onBarcodeScanned={handleBarCodeScanned}
-            barcodeScannerSettings={{
-              barcodeTypes: ['qr'],
-            }}
-            style={StyleSheet.absoluteFillObject}
-          />
+        <CameraView
+          onBarcodeScanned={handleBarCodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: ["qr"],
+          }}
+          style={StyleSheet.absoluteFillObject}
+        />
       )}
 
       <View style={styles.scanAreaContainer}>
@@ -100,18 +110,24 @@ export default function QRCodeReader({
 
       {scanned && validationResult && (
         <View style={styles.resultOverlay}>
-          {validationResult === 'success' && (
+          {validationResult === "success" && (
             <>
               <Feather name="check-circle" size={48} color="#4CAF50" />
-              <Text style={[styles.resultLabel, styles.successText]}>{successLabel}</Text>
-              <Text style={styles.resultData} numberOfLines={3}>{qrData}</Text>
+              <Text style={[styles.resultLabel, styles.successText]}>
+                {successLabel}
+              </Text>
+              <Text style={styles.resultData} numberOfLines={3}>
+                {qrData}
+              </Text>
             </>
           )}
 
-          {validationResult === 'error' && (
+          {validationResult === "error" && (
             <>
               <Feather name="x-circle" size={48} color="#F44336" />
-              <Text style={[styles.resultLabel, styles.errorText]}>{errorLabel}</Text>
+              <Text style={[styles.resultLabel, styles.errorText]}>
+                {errorLabel}
+              </Text>
               <Text style={styles.resultDataSmall}>{errorDescription}</Text>
             </>
           )}
@@ -127,7 +143,7 @@ export default function QRCodeReader({
   );
 }
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 const squareSize = width * 0.7;
 const cornerThickness = 4;
 const cornerSize = 40;
@@ -136,32 +152,32 @@ const cornerRadius = 20;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
   },
   permissionContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#000",
   },
   permissionText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
     marginTop: 10,
   },
   scanAreaContainer: {
     width: squareSize,
     height: squareSize,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   corner: {
     width: cornerSize,
     height: cornerSize,
-    position: 'absolute',
-    borderColor: 'white',
+    position: "absolute",
+    borderColor: "white",
   },
   topLeft: {
     top: 0,
@@ -192,50 +208,50 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: cornerRadius,
   },
   resultOverlay: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 50,
     left: 20,
     right: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    backgroundColor: "rgba(0, 0, 0, 0.85)",
     padding: 20,
     borderRadius: 15,
-    alignItems: 'center',
+    alignItems: "center",
   },
   resultLabel: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 8,
   },
   successText: {
-    color: '#4CAF50',
+    color: "#4CAF50",
   },
   errorText: {
-    color: '#F44336',
+    color: "#F44336",
   },
   resultData: {
     fontSize: 14,
-    color: '#4a90e2',
+    color: "#4a90e2",
     marginVertical: 10,
     paddingHorizontal: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
   resultDataSmall: {
     fontSize: 13,
-    color: 'white',
+    color: "white",
     marginVertical: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   instructionOverlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 60,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
   },
   instructionText: {
-    color: 'white',
+    color: "white",
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

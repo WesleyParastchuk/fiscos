@@ -1,0 +1,15 @@
+FROM node:20
+
+ARG GIT_BRANCH=main
+ENV GIT_BRANCH=${GIT_BRANCH}
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y git
+
+RUN git clone --branch $GIT_BRANCH https://github.com/WesleyParastchuk/nfe-api.git .
+
+RUN npm install
+RUN npm run build
+
+CMD ["npm", "start"]
