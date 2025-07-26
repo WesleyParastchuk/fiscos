@@ -1,8 +1,5 @@
-package com.example.fiscos.dto.processedProduct;
+package com.example.fiscos.dto.classification;
 
-import java.util.List;
-
-import com.example.fiscos.dto.classification.ClassificationDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -12,15 +9,20 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProcessedProductDTO {
-
+public class ClassificationDTO {
+    
     @JsonProperty("id")
     private Long id;
 
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("classifications")
-    private List<ClassificationDTO> classifications;
+    @JsonProperty("description")
+    private String description;
 
+    @JsonProperty("active")
+    private Boolean active;
+
+    @JsonProperty("parent")
+    private ClassificationDTO parent;
 }

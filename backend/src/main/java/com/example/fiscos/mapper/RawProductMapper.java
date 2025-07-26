@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.example.fiscos.dto.nfeApi.RawProductNFeDTO;
+import com.example.fiscos.dto.external.nfeApi.RawProductNFeDTO;
 import com.example.fiscos.dto.rawProduct.RawProductDTO;
 import com.example.fiscos.model.RawProduct;
 import com.example.fiscos.model.mongo.RawProductBackup;

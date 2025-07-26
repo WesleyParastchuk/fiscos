@@ -1,7 +1,7 @@
 package com.example.fiscos.service.openAi;
 
-import com.example.fiscos.dto.openAi.ProcessedProductClassificationDTO;
-import com.example.fiscos.dto.openAi.ProductClassifiedDTO;
+import com.example.fiscos.dto.external.openAi.ProcessedProductClassificationDTO;
+import com.example.fiscos.dto.external.openAi.ProductClassifiedDTO;
 import com.example.fiscos.model.Classification;
 import com.example.fiscos.model.ProcessedProduct;
 import com.example.fiscos.model.RawProduct;

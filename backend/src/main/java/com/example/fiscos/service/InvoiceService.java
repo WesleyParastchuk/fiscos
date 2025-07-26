@@ -1,8 +1,11 @@
 package com.example.fiscos.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import com.example.fiscos.dto.nfeApi.CompleteNFeDTO;
+import com.example.fiscos.dto.external.nfeApi.CompleteNFeDTO;
+import com.example.fiscos.dto.invoice.CompleteInvoiceDTO;
 import com.example.fiscos.mapper.InvoiceMapper;
 import com.example.fiscos.model.Invoice;
 import com.example.fiscos.model.QRCode;
@@ -28,5 +31,11 @@ public class InvoiceService {
         invoice.setQrCode(qrCode);
 
         return invoiceRepository.save(invoice);
+    }
+
+    public List<CompleteInvoiceDTO> getAllInvoices() {
+        return invoiceRepository.findAll().stream()
+                .map(invoiceMapper::toCompleteDTO)
+                .toList();
     }
 }

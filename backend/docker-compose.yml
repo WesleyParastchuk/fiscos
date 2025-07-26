@@ -8,7 +8,6 @@ services:
     container_name: backend-fiscos
     ports:
       - "8080:8080"
-      - "8080:8080"
     volumes:
       - .:/app
       - ~/.m2:/root/.m2
@@ -17,7 +16,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - NFE_API_URL=http://nfe-api:3000
+      - NFE_API_URL=${NFE_API_URL}
       - MONGO_URI=${MONGO_URI}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_MODEL=${OPENAI_MODEL}
@@ -26,7 +25,6 @@ services:
       - .env
     depends_on:
       - db
-      - nfe-api
 
   db:
     image: postgres:15
@@ -42,17 +40,21 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-  nfe-api:
-    build:
-      context: ./docker/nfe-api
-      dockerfile: Dockerfile.prod
-      args:
-        GIT_BRANCH: ${NFE_API_BRANCH}
-    container_name: nfe-api
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-fiscos
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+      - CHECK_EMAIL_DELIVERABILITY=False
     ports:
-      - "3000:3000"
-    env_file:
-      - .env
+      - "5050:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
 
 volumes:
   postgres-data:
+  pgadmin-data:

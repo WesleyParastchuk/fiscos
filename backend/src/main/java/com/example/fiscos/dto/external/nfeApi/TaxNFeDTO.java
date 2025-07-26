@@ -1,4 +1,4 @@
-package com.example.fiscos.dto.nfeApi;
+package com.example.fiscos.dto.external.nfeApi;
 
 import java.math.BigDecimal;
 

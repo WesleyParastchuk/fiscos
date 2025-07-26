@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.fiscos.dto.nfeApi.CompleteNFeDTO;
+import com.example.fiscos.dto.external.nfeApi.CompleteNFeDTO;
 import com.example.fiscos.model.Invoice;
 import com.example.fiscos.model.ProductInvoice;
 import com.example.fiscos.model.RawProduct;
@@ -40,6 +40,7 @@ public class ProductInvoiceService {
                             });
                     productInvoice.setInvoice(invoice);
                     productInvoice.setRawProduct(rawProduct);
+                    productInvoice.setProcessedProduct(rawProduct.getProcessedProduct());
                     return productInvoiceRepository.save(productInvoice);
                 })
                 .toList();
