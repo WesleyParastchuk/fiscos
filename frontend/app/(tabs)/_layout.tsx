@@ -1,6 +1,7 @@
-import { Tabs } from 'expo-router';
+import { router, Tabs } from 'expo-router';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
 
 export default function TabLayout() {
   return (
@@ -27,6 +28,35 @@ export default function TabLayout() {
           headerTitle: 'Notas Pendentes',
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="monetization-on" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="invoices/index"
+        options={{
+          title: 'Notas fiscais',
+          headerTitle: 'Notas Fiscais',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="receipt" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="invoices/[id]"
+        options={{
+          title: "Detalhes da Nota",
+          headerTitle: "Detalhes da Nota",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="receipt" size={size} color={color} />
+          ),
+          href: null,
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.push("/invoices")}
+              style={{ margin: 16 }}
+            >
+              <MaterialIcons name="arrow-back" size={24} color="#007AFF" />
+            </TouchableOpacity>
           ),
         }}
       />

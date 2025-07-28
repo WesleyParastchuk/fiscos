@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Dimensions,
   ActivityIndicator,
+  Linking,
+  TouchableOpacity,
 } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 import { Feather } from "@expo/vector-icons";
@@ -17,6 +19,62 @@ type QRCodeReaderProps = {
   successLabel?: string;
   errorLabel?: string;
   errorDescription?: string;
+  resetTimeoutMs?: number;
+  debounceMs?: number; // NOVO: tempo mínimo entre leituras para debounce
+};
+
+function useCameraPermission() {
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  return hasPermission;
+}
+
+const StatusOverlay = ({
+  validationResult,
+  qrData,
+  successLabel,
+  errorLabel,
+  errorDescription,
+}: {
+  validationResult: "success" | "error";
+  qrData: string | null;
+  successLabel: string;
+  errorLabel: string;
+  errorDescription: string;
+}) => {
+  if (validationResult === "success") {
+    return (
+      <View style={styles.resultOverlay}>
+        <Feather name="check-circle" size={48} color="#4CAF50" />
+        <Text style={[styles.resultLabel, styles.successText]}>
+          {successLabel}
+        </Text>
+        <Text style={styles.resultData} numberOfLines={3}>
+          {qrData}
+        </Text>
+        {qrData && (
+          <TouchableOpacity onPress={() => Linking.openURL(qrData)}>
+            <Text style={styles.linkText}>Abrir link</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.resultOverlay}>
+      <Feather name="x-circle" size={48} color="#F44336" />
+      <Text style={[styles.resultLabel, styles.errorText]}>{errorLabel}</Text>
+      <Text style={styles.resultDataSmall}>{errorDescription}</Text>
+    </View>
+  );
 };
 
 export default function QRCodeReader({
@@ -26,65 +84,83 @@ export default function QRCodeReader({
   successLabel = "Sucesso!",
   errorLabel = "Inválido",
   errorDescription = "Este QR Code não é válido.",
+  resetTimeoutMs = 2000,
+  debounceMs = 2000, // valor padrão de debounce
 }: QRCodeReaderProps) {
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [scanned, setScanned] = useState<boolean>(false);
+  const hasPermission = useCameraPermission();
+  const isFocused = useIsFocused();
+
+  const [scanned, setScanned] = useState(false);
   const [qrData, setQrData] = useState<string | null>(null);
   const [validationResult, setValidationResult] = useState<
     "success" | "error" | null
   >(null);
 
-  const isFocused = useIsFocused();
+  const timeoutRef = useRef<number | null>(null);
+  const debounceRef = useRef<boolean>(false); // controla debounce
+  const processingRef = useRef(false); // evita concorrência
 
   useEffect(() => {
-    const getCameraPermissions = async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    };
-
-    getCameraPermissions();
-  }, []);
-
-  useEffect(() => {
-    if (scanned) {
-      const timer = setTimeout(() => {
+    if (validationResult !== null) {
+      timeoutRef.current = setTimeout(() => {
         setScanned(false);
         setQrData(null);
         setValidationResult(null);
-      }, 2000);
-
-      return () => clearTimeout(timer);
+        processingRef.current = false;
+      }, resetTimeoutMs);
     }
-  }, [scanned]);
+    return () => {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [validationResult, resetTimeoutMs]);
 
-  const handleBarCodeScanned = async ({ data }: { data: string }) => {
-    if (scanned) {
-      return;
-    }
-    setScanned(true);
-    setQrData(data);
-    const result = await onValidate(data);
-    setValidationResult(result);
+  const handleBarCodeScanned = useCallback(
+    async ({ data }: { data: string }) => {
+      if (processingRef.current || debounceRef.current) return;
+      processingRef.current = true;
+      debounceRef.current = true;
 
-    if (result === "success") {
-      onScanSuccess(data);
-    }
-  };
+      setScanned(true);
+      setQrData(data);
+
+      try {
+        const result = await onValidate(data);
+        setValidationResult(result);
+
+        if (result === "success") {
+          onScanSuccess(data);
+        }
+      } catch {
+        setValidationResult("error");
+      }
+
+      // Desativa o debounce após debounceMs
+      setTimeout(() => {
+        debounceRef.current = false;
+      }, debounceMs);
+    },
+    [onScanSuccess, onValidate, debounceMs]
+  );
 
   if (hasPermission === null) {
     return (
       <View style={styles.permissionContainer}>
-        <ActivityIndicator size="large" color="#ffffff" />
+        <ActivityIndicator size="large" color="#fff" />
         <Text style={styles.permissionText}>
           Solicitando permissão da câmera...
         </Text>
       </View>
     );
   }
+
   if (hasPermission === false) {
     return (
       <View style={styles.permissionContainer}>
-        <Text style={styles.permissionText}>Sem acesso à câmera</Text>
+        <Text style={styles.permissionText}>
+          Sem acesso à câmera. Por favor, habilite nas configurações do sistema.
+        </Text>
       </View>
     );
   }
@@ -94,9 +170,7 @@ export default function QRCodeReader({
       {isFocused && hasPermission && (
         <CameraView
           onBarcodeScanned={handleBarCodeScanned}
-          barcodeScannerSettings={{
-            barcodeTypes: ["qr"],
-          }}
+          barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
           style={StyleSheet.absoluteFillObject}
         />
       )}
@@ -108,33 +182,15 @@ export default function QRCodeReader({
         <View style={[styles.corner, styles.bottomRight]} />
       </View>
 
-      {scanned && validationResult && (
-        <View style={styles.resultOverlay}>
-          {validationResult === "success" && (
-            <>
-              <Feather name="check-circle" size={48} color="#4CAF50" />
-              <Text style={[styles.resultLabel, styles.successText]}>
-                {successLabel}
-              </Text>
-              <Text style={styles.resultData} numberOfLines={3}>
-                {qrData}
-              </Text>
-            </>
-          )}
-
-          {validationResult === "error" && (
-            <>
-              <Feather name="x-circle" size={48} color="#F44336" />
-              <Text style={[styles.resultLabel, styles.errorText]}>
-                {errorLabel}
-              </Text>
-              <Text style={styles.resultDataSmall}>{errorDescription}</Text>
-            </>
-          )}
-        </View>
-      )}
-
-      {!scanned && (
+      {scanned && validationResult ? (
+        <StatusOverlay
+          validationResult={validationResult}
+          qrData={qrData}
+          successLabel={successLabel}
+          errorLabel={errorLabel}
+          errorDescription={errorDescription}
+        />
+      ) : (
         <View style={styles.instructionOverlay}>
           <Text style={styles.instructionText}>{instructionText}</Text>
         </View>
@@ -166,6 +222,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     marginTop: 10,
+    textAlign: "center",
+    paddingHorizontal: 20,
   },
   scanAreaContainer: {
     width: squareSize,
@@ -234,6 +292,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingHorizontal: 10,
     textAlign: "center",
+  },
+  linkText: {
+    color: "#4a90e2",
+    textDecorationLine: "underline",
+    fontWeight: "600",
   },
   resultDataSmall: {
     fontSize: 13,

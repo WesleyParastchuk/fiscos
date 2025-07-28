@@ -38,4 +38,10 @@ public class InvoiceService {
                 .map(invoiceMapper::toCompleteDTO)
                 .toList();
     }
+
+    public CompleteInvoiceDTO getInvoiceById(Long id) {
+        return invoiceRepository.findById(id)
+                .map(invoiceMapper::toCompleteDTO)
+                .orElseThrow(() -> new RuntimeException("Invoice not found"));
+    }
 }
