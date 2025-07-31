@@ -44,4 +44,10 @@ public class ClassificationMapper {
 
         return dto;
     }
+
+    public List<ClassificationDTO> toDtoList(List<Classification> classifications) {
+        return classifications.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
 }
