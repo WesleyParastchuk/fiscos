@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -6,86 +6,46 @@ import {
   FlatList,
   TouchableOpacity,
   Linking,
+  SafeAreaView,
+  ActivityIndicator,
   Alert,
-  SafeAreaView, // Importado para garantir que o layout fique bom em todos os dispositivos
 } from "react-native";
 import { useFocusEffect } from "expo-router";
-import { LinkLocalStorage } from "@/data/links/LinkLocalStorage";
 import { MaterialIcons } from "@expo/vector-icons";
-import axios from "axios";
+import { useLinks } from "@/hooks/useLinks";
 
 export default function HistoryScreen() {
-  const [links, setLinks] = useState<string[]>([]);
+  const { links, loading, loadAllLinks, deleteLink, sendLinks } = useLinks();
 
   useFocusEffect(
     React.useCallback(() => {
-      loadLinks();
-    }, [])
+      loadAllLinks();
+    }, [loadAllLinks])
   );
 
-  const loadLinks = async () => {
-    try {
-      const loadedLinks = await LinkLocalStorage.getInstance().getAllLinks();
-      setLinks(loadedLinks);
-    } catch (e) {
-      console.error("Erro ao carregar links:", e);
-      Alert.alert("Erro", "Não foi possível carregar o histórico.");
-    }
-  };
-
-  const handleDeleteItem = (linkToRemove: string) => {
-    Alert.alert("Excluir Link", "Tem certeza que deseja excluir este link?", [
-      { text: "Cancelar", style: "cancel" },
-      {
-        text: "Excluir",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await LinkLocalStorage.getInstance().removeLink(linkToRemove);
-            setLinks((prevLinks) =>
-              prevLinks.filter((link) => link !== linkToRemove)
-            );
-          } catch (e) {
-            console.error("Erro ao excluir link:", e);
-            Alert.alert("Erro", "Não foi possível excluir o link.");
-          }
+  const confirmDeleteLink = (link: string) => {
+    Alert.alert(
+      "Excluir Link",
+      "Tem certeza que deseja excluir este link?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Excluir",
+          style: "destructive",
+          onPress: () => deleteLink(link),
         },
-      },
-    ]);
+      ],
+      { cancelable: true }
+    );
   };
 
-  const handleSendToBackend = async () => {
-    if (links.length === 0) {
-      Alert.alert("Aviso", "Não há links para enviar.");
-      return;
-    }
-
-    await axios
-      .post("https://joey-composed-early.ngrok-free.app/links", {
-        links: links,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          Alert.alert("Sucesso", "Links enviados com sucesso!", [
-            {
-              text: "OK",
-              onPress: () => {
-                setLinks([]);
-                LinkLocalStorage.getInstance().clearLinks();
-              },
-            },
-          ]);
-        } else {
-          Alert.alert("Erro", "Servidor indisponível ou erro ao enviar links.");
-        }
-        return response.data;
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar dados:", error);
-        Alert.alert("Erro", "Não foi possível buscar os dados do backend.");
-        return [];
-      });
-  };
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" color="#007AFF" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -96,7 +56,7 @@ export default function HistoryScreen() {
       ) : (
         <FlatList
           data={links}
-          keyExtractor={(item, index) => `${item}-${index}`}
+          keyExtractor={(item) => item} // assumindo links únicos
           renderItem={({ item }) => (
             <View style={styles.linkItemContainer}>
               <TouchableOpacity
@@ -109,7 +69,7 @@ export default function HistoryScreen() {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={() => handleDeleteItem(item)}
+                onPress={() => confirmDeleteLink(item)}
               >
                 <MaterialIcons name="delete-outline" size={24} color="#666" />
               </TouchableOpacity>
@@ -121,10 +81,7 @@ export default function HistoryScreen() {
 
       {links.length > 0 && (
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.sendButton}
-            onPress={handleSendToBackend}
-          >
+          <TouchableOpacity style={styles.sendButton} onPress={sendLinks}>
             <Text style={styles.sendButtonText}>Enviar Histórico</Text>
             <MaterialIcons
               name="cloud-upload"

@@ -1,4 +1,4 @@
-package com.example.fiscos.dto.openAi;
+package com.example.fiscos.dto.external.openAi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,11 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProcessedProductClassificationDTO {
 
-    @JsonProperty("resumo")
+public class ProductClassifiedDTO {
+
+    @JsonProperty("produto")
     private String productName;
 
-    @JsonProperty("classificacaoId")
-    private Long classificationId;
+    @JsonProperty("resumo")
+    private String result;
 }

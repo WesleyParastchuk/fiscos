@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.fiscos.dto.nfeApi.RawProductNFeDTO;
-import com.example.fiscos.dto.openAi.ProductClassifiedDTO;
+import com.example.fiscos.dto.external.nfeApi.RawProductNFeDTO;
+import com.example.fiscos.dto.external.openAi.ProductClassifiedDTO;
 import com.example.fiscos.mapper.RawProductMapper;
 import com.example.fiscos.model.ProcessedProduct;
 import com.example.fiscos.model.RawProduct;

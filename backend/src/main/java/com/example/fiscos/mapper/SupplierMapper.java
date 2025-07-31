@@ -2,7 +2,7 @@ package com.example.fiscos.mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.example.fiscos.dto.nfeApi.SupplierNFeDTO;
+import com.example.fiscos.dto.external.nfeApi.SupplierNFeDTO;
 import com.example.fiscos.dto.supplier.SupplierDTO;
 import com.example.fiscos.model.Supplier;
 

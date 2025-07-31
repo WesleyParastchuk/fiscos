@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.fiscos.dto.nfeApi.TaxNFeDTO;
+import com.example.fiscos.dto.external.nfeApi.TaxNFeDTO;
 import com.example.fiscos.model.Invoice;
 import com.example.fiscos.model.Tax;
 import com.example.fiscos.repository.TaxRepository;

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.example.fiscos.dto.nfeApi.CompleteNFeDTO;
+import com.example.fiscos.dto.external.nfeApi.CompleteNFeDTO;
 import com.example.fiscos.exceptions.ExternalApiException;
 
 @Service

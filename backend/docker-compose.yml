@@ -6,10 +6,8 @@ services:
       context: .
       dockerfile: docker/Dockerfile.dev
     container_name: backend-fiscos
-    
     ports:
       - "8080:8080"
-      - "5005:5005"
     volumes:
       - .:/app
       - ~/.m2:/root/.m2
@@ -42,5 +40,21 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-fiscos
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+      - CHECK_EMAIL_DELIVERABILITY=False
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+
 volumes:
   postgres-data:
+  pgadmin-data:

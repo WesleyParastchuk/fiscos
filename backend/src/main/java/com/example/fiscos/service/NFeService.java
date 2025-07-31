@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.fiscos.dto.nfeApi.CompleteNFeDTO;
-import com.example.fiscos.dto.openAi.ProcessedProductClassificationDTO;
-import com.example.fiscos.dto.openAi.ProductClassifiedDTO;
+import com.example.fiscos.dto.external.nfeApi.CompleteNFeDTO;
+import com.example.fiscos.dto.external.openAi.ProcessedProductClassificationDTO;
+import com.example.fiscos.dto.external.openAi.ProductClassifiedDTO;
 import com.example.fiscos.model.Classification;
 import com.example.fiscos.model.Invoice;
 import com.example.fiscos.model.ProcessedProduct;
@@ -67,7 +67,7 @@ public class NFeService {
     @Transactional
     public void saveAll(Long userId, List<String> links) {
         User user = userService.checkUserExists(userId);
-        qrCodeService.checkDuplicateLinks(links);
+        links = qrCodeService.removeDuplicateLinks(links);
 
         List<CompleteNFeDTO> nfeList = nfeApiService.getNFeByLinks(links);
 

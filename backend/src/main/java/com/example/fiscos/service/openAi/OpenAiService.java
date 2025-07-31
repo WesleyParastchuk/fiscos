@@ -1,8 +1,7 @@
 package com.example.fiscos.service.openAi;
 
-import com.example.fiscos.dto.openAi.ProcessedProductClassificationDTO;
-import com.example.fiscos.dto.openAi.ProductClassifiedDTO;
-import com.example.fiscos.model.Classification;
+import com.example.fiscos.dto.external.openAi.ProcessedProductClassificationDTO;
+import com.example.fiscos.dto.external.openAi.ProductClassifiedDTO;
 import com.example.fiscos.model.ProcessedProduct;
 import com.example.fiscos.model.RawProduct;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -73,7 +72,7 @@ public class OpenAiService {
                                                         .distinct()
                                                         .toList());
 
-                        String prompt = "Classifique os produtos a seguir usando APENAS os dados das classificações disponíveis:\n"
+                        String prompt = "Classifique os produtos a seguir usando APENAS os dados das classificações disponíveis. Caso nenhuma classificação se relacione, use os dados da classificação \"Outros\". NUNCA quebre o padrão de resposta dos exemplos.\n"
                                         + jsonProducts
                                         + "\n\nClassificações disponíveis:\n" + classificationsTree
                                         + "\n\nExemplo:\n" + EXAMPLEPRODUCTLISTCLASSIFIED;
