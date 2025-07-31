@@ -16,6 +16,7 @@ export default function TabLayout() {
         options={{
           title: "Escanear QR",
           headerShown: false,
+          href: null,
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="qr-code-scanner" size={size} color={color} />
           ),
@@ -26,6 +27,7 @@ export default function TabLayout() {
         options={{
           title: "Notas pendentes",
           headerTitle: "Notas Pendentes",
+          href: null,
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="monetization-on" size={size} color={color} />
           ),
@@ -36,6 +38,7 @@ export default function TabLayout() {
         options={{
           title: "Notas fiscais",
           headerTitle: "Notas Fiscais",
+          href: null,
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="receipt" size={size} color={color} />
           ),
@@ -64,6 +67,7 @@ export default function TabLayout() {
         name="categories/index"
         options={{
           title: "Categorias",
+          href: null,
           headerTitle: "Categorias",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="category" size={size} color={color} />
